@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
-    - run: git clone --bare https://github.com/llvm/llvm-project.git -b llvmorg-12.0.0 ./external/llvm-project
+    - run: git clone --depth 1 https://github.com/llvm/llvm-project.git -b llvmorg-12.0.0 ./external/llvm-project
     - run: ls -R ./external/llvm-project
     - if: matrix.os == 'macOS-latest'
       run: cmake -Bbuild -DCMAKE_C_FLAGS="-arch x86_64 -arch arm64" -DCMAKE_CXX_FLAGS="-arch x86_64 -arch arm64" ./external/llvm-project/llvm -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_TARGETS_TO_BUILD="AArch64;X86;RISCV" -DLLVM_ENABLE_PROJECTS=lld -DCMAKE_INSTALL_PREFIX=install
