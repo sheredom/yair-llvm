@@ -16,11 +16,11 @@ jobs:
     - uses: actions/checkout@v2
     - run: git submodule update --init
     - if: matrix.os == 'macOS-latest'
-      run: cmake -Bbuild -DCMAKE_C_FLAGS="-arch x86_64 -arch arm64" -DCMAKE_CXX_FLAGS="-arch x86_64 -arch arm64" ./external/llvm-project/llvm -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DLLVM_ENABLE_ASSERTIONS=ON
+      run: cmake -Bbuild -DCMAKE_C_FLAGS="-arch x86_64 -arch arm64" -DCMAKE_CXX_FLAGS="-arch x86_64 -arch arm64" ./external/llvm-project/llvm -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_TARGETS_TO_BUILD="AArch64;X86;RISCV" -DLLVM_ENABLE_PROJECTS=lld -DCMAKE_INSTALL_PREFIX=install
     - if: matrix.os != 'macOS-latest'
-      run: cmake -Bbuild ./external/llvm-project/llvm -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DLLVM_ENABLE_ASSERTIONS=ON
-    - run: cmake --build build --target install
+      run: cmake -Bbuild ./external/llvm-project/llvm -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DLLVM_ENABLE_ASSERTIONS=ON -DLLVM_TARGETS_TO_BUILD="AArch64;X86;RISCV" -DLLVM_ENABLE_PROJECTS=lld -DCMAKE_INSTALL_PREFIX=install
+    - run: cmake --build build --target install --parallel 4
     - uses: papeloto/action-zip@v1
       with:
-        files: build/install
+        files: install
         dest: ${{ matrix.os }}-llvm.zip
