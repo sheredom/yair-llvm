@@ -19,7 +19,7 @@ jobs:
       run: cmake -Bbuild -DCMAKE_C_FLAGS="-arch x86_64 -arch arm64" -DCMAKE_CXX_FLAGS="-arch x86_64 -arch arm64" ./external/llvm-project/llvm -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DLLVM_ENABLE_ASSERTIONS=ON
     - if: matrix.os != 'macOS-latest'
       run: cmake -Bbuild ./external/llvm-project/llvm -DCMAKE_BUILD_TYPE=RELWITHDEBINFO -DLLVM_ENABLE_ASSERTIONS=ON
-    - run: cmake --build build --target=install
+    - run: cmake --build build --target install
     - uses: papeloto/action-zip@v1
       with:
         files: build/install
